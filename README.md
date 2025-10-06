@@ -1,73 +1,67 @@
-# React + TypeScript + Vite
+# 🌿 Unsplash Image Explorer (Work in Progress)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A **React + TypeScript + Vite** application to explore images from the **Unsplash API**.  
+This project is currently in **active development**. Core features like **search with debounce** and **infinite scrolling** are implemented, with more enhancements planned.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🚀 Current Features
 
-## React Compiler
+- Search Unsplash images with **debounced input**  
+- **Infinite scroll** to load more images while scrolling  
+- Responsive **grid layout** using Tailwind CSS  
+- Photo cards showing photographer details and clickable links to Unsplash  
+- Custom hooks for:
+  - Infinite scrolling
+  - Intersection observer
+  - Debounced search
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
-## Expanding the ESLint configuration
+## 🧩 Tech Stack
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+| Layer | Technology |
+|-------|------------|
+| Frontend | React, TypeScript, Vite |
+| Styling | Tailwind CSS |
+| Data Fetching | Axios, React Query |
+| API | Unsplash REST API |
+| State & Hooks | Custom hooks for debounce and intersection observer |
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+---
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## 🛠️ Setup & Running Locally
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+1. **Clone the repository**
+```bash
+git clone https://github.com/SuriyaSR/unsplash-explorer.git
+cd unsplash-explorer
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+2. **Install dependencies**
+```bash
+npm install
 ```
+
+3. **Create .env file in the root:**
+```bash
+VITE_UNSPLASH_ACCESS_KEY=your_access_key_here
+```
+
+4. **Run development server**
+```bash
+npm run dev
+```
+
+5. **Open in browser:**
+```bash
+http://localhost:5173
+```
+
+## ⚡ Planned Features
+
+- Lightbox / modal view for images
+- Category filters (Nature, Travel, Technology, etc.)
+- Dark mode toggle
+- Bookmark favorite images locally
+- Unit & integration testing
