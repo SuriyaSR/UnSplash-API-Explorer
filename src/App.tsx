@@ -1,34 +1,39 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useErrorContext } from "./context/ErrorContext";
+import { ErrorBoundary } from "./components/ErrorBoundary";
+import { useEffect } from "react";
+import SearchBar from "./components/SearchBar";
+import { usePhotos } from "./hooks/usePhotos";
+import ErrorBanner from "./components/ErrorBanner";
 
 function App() {
-  const [count, setCount] = useState(0)
+
+  const {error, clearError} = useErrorContext();
+  const {photos, loading} = usePhotos();
+
+  useEffect(() => {
+    //api call on 1st load
+  }, []);
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <ErrorBoundary>
+        <div className="min-h-screen text-center p-6 bg-gray-50">
+          <h1 className="text-3xl font-semibold mb-4"> UnSplash Image Explorer </h1>   
+          {error.message && (
+            <ErrorBanner message = {error.message} clearError = {clearError}/>
+          )}
+          <p className="text-gray-600">Explore and search for stunning images from Unsplash.</p>
+          {/* Main content goes here */}
+          <SearchBar />
+          <div className="mt-6">
+            {loading ? (
+              <p>Loading photos...</p> 
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                Gallery component
+                </div>)}
+          </div>
+        </div>
+    </ErrorBoundary>
   )
 }
 
