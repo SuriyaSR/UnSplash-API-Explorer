@@ -1,24 +1,38 @@
 //custom hook to fetch photos from unsplash
 import { useState, useEffect, useCallback } from "react"
 import type { UnsplashPhoto } from "../types/unsplash"
-import { getNewPhotos } from "../api/api"
+import { getNewPhotos, searchPhotos } from "../api/api"
+import { useDebounce } from "./useDebounce"
 
 export const usePhotos = () => {
   const [photos, setPhotos] = useState<UnsplashPhoto[]>([])
+  const [searchQuery, setSearchQuery] = useState<string>("")
   const [loading, setLoading] = useState<boolean>(false)
-  const [page, setPage] = useState<number>(1)
-  const perPage = 10; //photos per page
+  const perPage = 20; //photos per page
 
-  const fetchPhotos = useCallback(async () => {
+  const debouncedSearchQuery =  useDebounce<string>(searchQuery, 1000);
+
+  const fetchPhotos = useCallback(async (pageNumber = 1, searchTerm="") => {
     setLoading(true)
-    const response = await getNewPhotos(page, perPage);
-    setPhotos(response.data);
+    const response = searchTerm ? await searchPhotos(searchTerm, pageNumber, perPage) : await getNewPhotos(pageNumber, perPage);
+    const data = searchTerm ? response.data.results : response.data;
+    setPhotos(data);
     setLoading(false);
-  }, [page])
+  }, [])
   
   useEffect(() => {
-    fetchPhotos();
+    fetchPhotos(1);
   }, [])
 
-  return { photos, loading, fetchPhotos}
+  //useeffect to fetch photos when search query changes
+  useEffect(() => {
+    if (debouncedSearchQuery.trim()) {
+      fetchPhotos(1, debouncedSearchQuery);
+    } else {
+      // If query cleared, reload default
+      fetchPhotos(1);
+    }
+  }, [debouncedSearchQuery])
+
+  return { photos, loading, fetchPhotos, searchQuery, setSearchQuery };
 }

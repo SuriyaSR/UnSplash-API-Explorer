@@ -1,6 +1,6 @@
 
 export interface ErrorState {
-    message: string | null;
+   message: string | null;
    status?: number | null;
 }
 
