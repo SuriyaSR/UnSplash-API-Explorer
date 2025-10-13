@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 
-export function useDebounce <T> (queryValue:T, delay:number) : T {
+export function useDebounce (queryValue:string, delay:number) : string {
 
-   const [debouncedValue, setDebouncedValue] = useState<T>(queryValue);
+   const [debouncedValue, setDebouncedValue] = useState<string>("");
     useEffect(() => {      
         const handler = setTimeout(() => {
            setDebouncedValue(queryValue);
