@@ -4,7 +4,7 @@ import { handleApiError } from "../utils/apiError";
 import { api } from "./api";
 
 export const setupInterceptors = (setError:(err:ErrorState) => void) => {
-  api.interceptors.response.use(
+  const interceptorId = api.interceptors.response.use(
     response => response,
     (error: AxiosError) => {
      const parsedError = handleApiError(error);
@@ -12,4 +12,5 @@ export const setupInterceptors = (setError:(err:ErrorState) => void) => {
      return Promise.reject(error);
     }
   )
+  return interceptorId;
 }

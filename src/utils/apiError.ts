@@ -2,6 +2,14 @@ import type { AxiosError } from "axios";
 import type { ErrorState } from "../types/error";
 
 export const handleApiError = (error: AxiosError) : ErrorState => {
+
+     if (!error.response) {
+        return { 
+            message: "Network error. Please check your internet connection and try again.", 
+            status: null 
+        };
+    }
+    
     const status = error.response?.status || 500;
 
     switch (status) {
