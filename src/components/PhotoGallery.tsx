@@ -1,10 +1,38 @@
+import { useEffect, useRef } from "react";
 import type { UnsplashPhoto } from "../types/unsplash"
 
 interface PhotoGalleryProps {
   photos: UnsplashPhoto[];
+  loading: boolean;
+  hasMore: boolean;
+  loadMorePhotos: () => void;
 }
-const PhotoGallery: React.FC<PhotoGalleryProps> = ({ photos }) => {
-  return photos.length > 0 ? (
+const PhotoGallery: React.FC<PhotoGalleryProps> = ({ photos, loadMorePhotos, loading, hasMore }) => {
+
+  const observerTarget = useRef<HTMLDivElement>(null);  
+
+  useEffect (() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if(entries[0].isIntersecting && hasMore && !loading){
+           loadMorePhotos();
+        }         
+      },{threshold:0.1} //Trigger when 10%  visible
+    );
+
+    const currentTarget = observerTarget.current;
+    if(currentTarget)
+      observer.observe(currentTarget)
+
+    return () => {
+      if(currentTarget)
+        observer.unobserve(currentTarget);
+    }
+  },[hasMore, loading, loadMorePhotos])
+
+  return (
+    <>
+    { photos.length > 0 ? (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
       {photos.map((photo) => (
                 <div key={photo.id} className="rounded overflow-hidden shadow-lg border border-gray-300 ">
@@ -27,7 +55,27 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({ photos }) => {
     </div>
   ) : (
     <p className="text-center text-gray-500 text-lg">No images found. Try another one..!!</p>
-  );
-}
+  )}
+
+  {/* Sentinel Element for infinite scroll */}
+
+  <div ref={observerTarget} className="h-10">
+    {/* Loading indicator at bottom */}
+    {loading && photos.length > 0  && (
+      <div className="text-center py-4">
+        <p className="text-gray-500">Loading More Photos...</p>
+      </div>
+    ) }
+
+    {/* No more results message */}
+    {!hasMore && photos.length > 0 && (
+      <div className="text-center py-4">
+        <p className="text-gray-500">No more photos to load</p>
+      </div>
+    )}
+  </div>
+  </>
+)}
+
 
 export default PhotoGallery
