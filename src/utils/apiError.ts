@@ -10,7 +10,7 @@ export const handleApiError = (error: AxiosError) : ErrorState => {
         };
     }
     
-    const status = error.response?.status || 500;
+    const status = error.response.status || 500;
 
     switch (status) {
         case 400:

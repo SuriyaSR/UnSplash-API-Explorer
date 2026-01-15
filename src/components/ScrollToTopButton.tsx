@@ -1,5 +1,7 @@
 import type React from "react"
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
+import { SCROLL_THRESHOLD } from "../config/constants";
+import { useThrottle } from "../hooks/useThrottle";
 
 interface ScrollToTopButtonProps {
     scrollContainerRef :  React.RefObject<HTMLDivElement | null>;
@@ -9,18 +11,20 @@ const ScrollToTopButton: React.FC<ScrollToTopButtonProps> = ({scrollContainerRef
     
   const [isVisible, setIsVisible] = useState<boolean>(false);
 
-  useEffect(() => {
+   const handleScroll = useCallback(() => {
+      const container = scrollContainerRef.current;
+      if(!container) return;
+      setIsVisible(container.scrollTop > SCROLL_THRESHOLD);
+    },[scrollContainerRef]);
+
+    const throttledHandleScroll = useThrottle(handleScroll, 200);
+
+  useEffect(() => {   
     const container = scrollContainerRef.current;
     if(!container) return;
-
-    const handleScroll = () => {
-        // Show button when scrolled down 300px
-      setIsVisible(container.scrollTop > 300);
-    }
-
-    container.addEventListener("scroll", handleScroll);
-    return () => container.removeEventListener("scroll", handleScroll);
-  },[scrollContainerRef])
+    container.addEventListener("scroll", throttledHandleScroll);
+    return () => container.removeEventListener("scroll", throttledHandleScroll);
+  },[scrollContainerRef, throttledHandleScroll])
 
   const scrollToTop = () => {
     scrollContainerRef?.current?.scrollTo({

@@ -59,7 +59,7 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({ photos, loadMorePhotos, loa
 
   {/* Sentinel Element for infinite scroll */}
 
-  <div ref={observerTarget} className="h-10">
+  <div ref={observerTarget} className="h-10" />
     {/* Loading indicator at bottom */}
     {loading && photos.length > 0  && (
       <div className="text-center py-4">
@@ -73,7 +73,7 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({ photos, loadMorePhotos, loa
         <p className="text-gray-500">No more photos to load</p>
       </div>
     )}
-  </div>
+  
   </>
 )}
 
