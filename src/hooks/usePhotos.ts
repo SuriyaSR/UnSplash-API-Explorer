@@ -3,8 +3,9 @@ import { useState, useEffect, useCallback } from "react"
 import type { UnsplashPhoto } from "../types/unsplash"
 import { getNewPhotos, searchPhotos } from "../api/api"
 import { useDebounce } from "./useDebounce"
+import { DEBOUNCE_DELAY, PHOTOS_PER_PAGE } from "../config/constants";
 
-const perPage = 20; //photos per page
+const perPage = PHOTOS_PER_PAGE; //photos per page
 
 export const usePhotos = () => {
   const [photos, setPhotos] = useState<UnsplashPhoto[]>([])
@@ -14,7 +15,7 @@ export const usePhotos = () => {
   const [hasMore, setHasMore] = useState<boolean>(true)
  
 
-  const debouncedSearchQuery =  useDebounce(searchQuery, 1000);  
+  const debouncedSearchQuery =  useDebounce(searchQuery, DEBOUNCE_DELAY);  
 
   const fetchPhotos = useCallback(async (pageNumber = 1, searchTerm="", isLoadMore=false) => {
     setLoading(true)
@@ -26,7 +27,6 @@ export const usePhotos = () => {
         setHasMore(pageNumber < searchData.total_pages)
 
         if(isLoadMore){
-          // setPhotos(prev => [...prev, ...searchData.results]);
           setPhotos(prev => {
             const combined = [...prev, ...searchData.results];
             const unique = Array.from(new Map(combined.map(p => [p.id, p])).values());
@@ -41,7 +41,6 @@ export const usePhotos = () => {
        setHasMore(photos.length === perPage)
 
         if(isLoadMore){
-          // setPhotos(prev => [...prev, ...photos]);
           setPhotos(prev => {
             const combined = [...prev, ...photos];
             const unique = Array.from(new Map(combined.map(p => [p.id, p])).values());
@@ -55,7 +54,7 @@ export const usePhotos = () => {
     } catch (err){
       if(!isLoadMore) setPhotos([]);
       setHasMore(false)
-      console.warn("error : ", err)
+      console.log("error : ", err)
     } finally {
       setLoading(false);
     }    
@@ -74,7 +73,6 @@ export const usePhotos = () => {
     setPage(1);
     setHasMore(true);
     setPhotos([]);
-    setLoading(true);
 
     if (debouncedSearchQuery.trim()) {
       fetchPhotos(1, debouncedSearchQuery);
