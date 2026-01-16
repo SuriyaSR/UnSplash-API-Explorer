@@ -2,8 +2,7 @@
 import { useState, useEffect, useCallback } from "react"
 import type { UnsplashPhoto } from "../types/unsplash"
 import { getNewPhotos, searchPhotos } from "../api/api"
-import { useDebounce } from "./useDebounce"
-import { DEBOUNCE_DELAY, PHOTOS_PER_PAGE } from "../config/constants";
+import { PHOTOS_PER_PAGE } from "../config/constants";
 
 const perPage = PHOTOS_PER_PAGE; //photos per page
 
@@ -14,9 +13,6 @@ export const usePhotos = () => {
   const [page, setPage] = useState<number>(1);
   const [hasMore, setHasMore] = useState<boolean>(true)
  
-
-  const debouncedSearchQuery =  useDebounce(searchQuery, DEBOUNCE_DELAY);  
-
   const fetchPhotos = useCallback(async (pageNumber = 1, searchTerm="", isLoadMore=false) => {
     setLoading(true)
     try{
@@ -64,22 +60,22 @@ export const usePhotos = () => {
     if(loading || !hasMore) return;
     const nextPage = page + 1;
     setPage(nextPage)
-    fetchPhotos(nextPage, debouncedSearchQuery,true);
-  }, [loading, hasMore, page, debouncedSearchQuery, fetchPhotos])
+    fetchPhotos(nextPage, searchQuery,true);
+  }, [loading, hasMore, page, searchQuery, fetchPhotos])
 
   //useEffect to fetch photos when search query changes
   useEffect(() => {
     // Reset pagination on new search
     setPage(1);
     setHasMore(true);
-    setPhotos([]);
+    // setPhotos([]);
 
-    if (debouncedSearchQuery.trim()) {
-      fetchPhotos(1, debouncedSearchQuery);
+    if (searchQuery.trim()) {
+      fetchPhotos(1, searchQuery);
     } else {
       fetchPhotos(1);
     }
-  }, [debouncedSearchQuery, fetchPhotos])
+  }, [searchQuery, fetchPhotos])
 
   return { photos, loading, fetchPhotos, searchQuery, setSearchQuery, loadMorePhotos, hasMore };
 }
