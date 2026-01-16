@@ -4,7 +4,7 @@ import type { UnsplashPhoto } from "../types/unsplash"
 import { getNewPhotos, searchPhotos } from "../api/api"
 import { PHOTOS_PER_PAGE } from "../config/constants";
 
-const perPage = PHOTOS_PER_PAGE; //photos per page
+const perPage = PHOTOS_PER_PAGE;
 
 export const usePhotos = () => {
   const [photos, setPhotos] = useState<UnsplashPhoto[]>([])
