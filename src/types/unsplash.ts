@@ -5,9 +5,13 @@ export interface UnsplashPhoto {
     urls: {
         regular: string;
         small: string;
+        thumb: string;
     };
     user: {
         name: string;
+        profile_image: {
+            small: string;
+        }
         links: {
             html: string;
         };

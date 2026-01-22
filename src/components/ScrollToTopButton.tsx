@@ -1,42 +1,16 @@
 import type React from "react"
-import { useCallback, useEffect, useState } from "react"
-import { SCROLL_THRESHOLD } from "../config/constants";
-import { useThrottle } from "../hooks/useThrottle";
-
+import { memo} from "react"
 interface ScrollToTopButtonProps {
-    scrollContainerRef :  React.RefObject<HTMLDivElement | null>;
+    isVisible: boolean;
+    onClick: () => void;
 }
 
-const ScrollToTopButton: React.FC<ScrollToTopButtonProps> = ({scrollContainerRef}) => {
+const ScrollToTopButton: React.FC<ScrollToTopButtonProps> = ({isVisible, onClick}) => {
     
-  const [isVisible, setIsVisible] = useState<boolean>(false);
-
-   const handleScroll = useCallback(() => {
-      const container = scrollContainerRef.current;
-      if(!container) return;
-      setIsVisible(container.scrollTop > SCROLL_THRESHOLD);
-    },[scrollContainerRef]);
-
-    const throttledHandleScroll = useThrottle(handleScroll, 200);
-
-  useEffect(() => {   
-    const container = scrollContainerRef.current;
-    if(!container) return;
-    container.addEventListener("scroll", throttledHandleScroll);
-    return () => container.removeEventListener("scroll", throttledHandleScroll);
-  },[scrollContainerRef, throttledHandleScroll])
-
-  const scrollToTop = () => {
-    scrollContainerRef?.current?.scrollTo({
-        top:0,
-        behavior:"smooth"
-    })
-  }
-
   if(!isVisible) return null;
 
   return (
-    <button onClick={scrollToTop}
+    <button onClick={onClick}
         className="fixed bottom-8 right-8 bg-blue-500 hover:bg-blue-600 text-white rounded-full p-4 shadow-lg transition-all duration-300 hover:scale-110 z-50"
         aria-label="Scroll to top">
         <svg
@@ -57,4 +31,4 @@ const ScrollToTopButton: React.FC<ScrollToTopButtonProps> = ({scrollContainerRef
   )
 }
 
-export default ScrollToTopButton
+export default memo(ScrollToTopButton)
