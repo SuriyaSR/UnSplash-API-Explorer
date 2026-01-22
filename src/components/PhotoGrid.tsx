@@ -1,7 +1,8 @@
 import type { UnsplashPhoto } from "../types/unsplash"
 import { VirtuosoGrid, type VirtuosoGridHandle } from "react-virtuoso"
 import PhotoCard from "./PhotoCard"
-import { memo, useImperativeHandle, useMemo, useRef } from "react";
+import { memo, useImperativeHandle, useMemo, useRef, useState } from "react";
+import ImageModal from "./ImageModal";
 
 export interface PhotoGridHandle {
   scrollToTop: () => void;
@@ -18,6 +19,7 @@ interface PhotoGridProps {
 
 const PhotoGrid = ({ photos, loading, hasMore, loadMorePhotos, ref, onAtTopChange }: PhotoGridProps) => {
   const virtuosoRef = useRef<VirtuosoGridHandle>(null);
+  const [selectedPhoto, setSelectedPhoto] = useState<UnsplashPhoto | null>(null);
 
   useImperativeHandle(ref, () => ({
     scrollToTop: () => {
@@ -52,12 +54,20 @@ const PhotoGrid = ({ photos, loading, hasMore, loadMorePhotos, ref, onAtTopChang
         listClassName="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-4"
         itemContent={(_index, photo) => (
           <div className="h-full">
-            <PhotoCard photo={photo} />
+            <PhotoCard photo={photo} onOpen={() => setSelectedPhoto(photo)}/>
           </div>
         )}
         // 2. Add the loader as a footer component inside the scrollable area
         components={virtuosoComponents}
       />
+
+      {selectedPhoto && (
+        <ImageModal 
+          photo={selectedPhoto} 
+          onClose={() => setSelectedPhoto(null)} 
+        />
+      )}
+
     </div>
   )
 }
