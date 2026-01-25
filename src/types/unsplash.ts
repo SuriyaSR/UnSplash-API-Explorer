@@ -28,3 +28,8 @@ export interface UnsplashSearchResponse {
     total_pages: number;
     results: UnsplashPhoto[];
 }
+export interface unsplashCategoies {
+    id: string;
+    slug: string;
+    title: string;
+}
