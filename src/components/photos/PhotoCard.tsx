@@ -1,5 +1,5 @@
 import { memo } from "react"
-import type { UnsplashPhoto } from "../types/unsplash"
+import type { UnsplashPhoto } from "@/types/unsplash"
 interface PhotoCardProps {
   photo: UnsplashPhoto;
   onOpen: () => void; // New prop
@@ -8,14 +8,14 @@ interface PhotoCardProps {
 const PhotoCard = memo(({ photo, onOpen }: PhotoCardProps) => {
   return (
     <>
-    <div onClick={onOpen}
-    className="border border-gray-200 duration-300
+      <div onClick={onOpen}
+        className="border border-gray-200 duration-300
             group relative h-72 w-full overflow-hidden rounded-lg bg-gray-200 shadow-sm 
             transition-all hover:shadow-xl cursor-pointer">
-        <img 
-          src={photo.urls.small}  
+        <img
+          src={photo.urls.small}
           // loading="lazy"
-          alt={photo.alt_description || "Unsplash Photo"} 
+          alt={photo.alt_description || "Unsplash Photo"}
           className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
           title={photo.alt_description || "No description provided"}
         />
@@ -42,9 +42,9 @@ const PhotoCard = memo(({ photo, onOpen }: PhotoCardProps) => {
         <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between translate-y-[10px] opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
           <div className="flex items-center gap-2 truncate">
             {/* User Icon/Avatar */}
-            <img 
-              src={photo.user.profile_image.small} 
-              alt={photo.user.name} 
+            <img
+              src={photo.user.profile_image.small}
+              alt={photo.user.name}
               className="h-8 w-8 rounded-full border border-white/50"
             />
             <a
@@ -59,10 +59,10 @@ const PhotoCard = memo(({ photo, onOpen }: PhotoCardProps) => {
           </div>
         </div>
 
-    </div>
+      </div>
     </>
   )
 })
 
-	
+
 export default PhotoCard
