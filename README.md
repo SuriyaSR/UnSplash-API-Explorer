@@ -15,10 +15,10 @@ Core features like **debounced search, infinite scrolling, virtualized rendering
 ## 🔄 CI/CD + Deployment
 This project uses **GitHub Actions** to automatically:
 
-✅ Build the Docker image
+✅ Build the Docker image<br>
 ✅ Push the latest image to **Docker Hub** on every push/merge to `master`
 
-The app is deployed on **AWS EC2 using Docker, and Watchtower** automatically pulls and redeploys the latest image whenever a new version is pushed to Docker Hub.
+The app is deployed on **AWS EC2 using Docker and Watchtower** automatically pulls and redeploys the latest image whenever a new version is pushed to Docker Hub.
 
 ## 🌍 Live Demo
 
