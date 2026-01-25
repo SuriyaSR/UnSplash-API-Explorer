@@ -1,4 +1,12 @@
 # 🌿 Unsplash Image Explorer
+![React](https://img.shields.io/badge/React-18-blue)
+![TypeScript](https://img.shields.io/badge/TypeScript-5-blue)
+![Vite](https://img.shields.io/badge/Vite-5-purple)
+![TailwindCSS](https://img.shields.io/badge/TailwindCSS-3-teal)
+![Docker](https://img.shields.io/badge/Docker-Enabled-blue)
+[![CI](https://github.com/SuriyaSR/UnSplash-API-Explorer/actions/workflows/docker-image.yml/badge.svg)](https://github.com/SuriyaSR/UnSplash-API-Explorer/actions/workflows/docker-image.yml)
+[![Docker Pulls](https://img.shields.io/docker/pulls/suriyasr/unsplash-api-explorer)](https://hub.docker.com/r/suriyasr/unsplash-api-explorer)
+[![Docker Image Size](https://img.shields.io/docker/image-size/suriyasr/unsplash-api-explorer/latest)](https://hub.docker.com/r/suriyasr/unsplash-api-explorer)
 
 A **React + TypeScript + Vite** application to explore images from the **Unsplash API**.<br>
 This project is currently in **active development** with a focus on performance-first UI, clean architecture, and scalable patterns.<br>
@@ -12,11 +20,13 @@ This project uses **GitHub Actions** to automatically:
 
 The app is deployed on **AWS EC2 using Docker, and Watchtower** automatically pulls and redeploys the latest image whenever a new version is pushed to Docker Hub.
 
-## 📌 Docker Image
-Docker Hub:
-```bash
-suriyasr/unsplash-api-explorer
-```
+## 🌍 Live Demo
+
+- **Vercel (Frontend Demo):** https://unsplashimageexplorer.vercel.app
+- **AWS EC2 (Docker Deployment):** http://13.60.190.29/
+- **Docker Hub Image:** https://hub.docker.com/r/suriyasr/unsplash-api-explorer
+
+> Note: AWS EC2 demo may be stopped occasionally to manage costs.
 
 ## 🚀 Current Features
 
