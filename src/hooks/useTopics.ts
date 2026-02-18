@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import type { UnsplashTopic } from "@/types/unsplash";
+import { getTopics } from "@/api/api";
 
 let cachedTopics: UnsplashTopic[] | null = null;
 
@@ -21,11 +22,11 @@ export const useTopics = (enabled: boolean) => {
           return;
         }
 
-        const res = await fetch("/api/topics"); // your API
-        const data: UnsplashTopic[] = await res.json();
+        const response = await getTopics();
+        const topicsData: UnsplashTopic[] = response.data;
 
-        cachedTopics = data;
-        setTopics(data);
+        cachedTopics = topicsData;
+        setTopics(topicsData);
         hasFetched.current = true;
 
       } catch (err) {
