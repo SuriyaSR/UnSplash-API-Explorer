@@ -14,7 +14,7 @@ const PhotoCard = memo(({ photo, onOpen }: PhotoCardProps) => {
             transition-all hover:shadow-xl cursor-pointer">
         <img
           src={photo.urls.small}
-          // loading="lazy"
+          loading="lazy"
           alt={photo.alt_description || "Unsplash Photo"}
           className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
           title={photo.alt_description || "No description provided"}

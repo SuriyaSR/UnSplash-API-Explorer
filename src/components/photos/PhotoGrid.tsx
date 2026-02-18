@@ -46,7 +46,7 @@ const PhotoGrid = ({ photos, loading, hasMore, loadMorePhotos, ref, onAtTopChang
     <div className="w-full h-full">
       <VirtuosoGrid
         data={photos} ref={virtuosoRef}
-        overscan={2000} // Pre-renders 2000px of content to prevent white flashes
+        overscan={500} 
         computeItemKey={(_, photo) => photo.id}
         // 1. Automatically trigger loadMore when reaching the end
         endReached={() => {

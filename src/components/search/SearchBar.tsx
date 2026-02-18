@@ -4,9 +4,10 @@ import { useState, useEffect } from "react";
 interface SearchBarProps {
   query: string;
   setQuery: (value: string) => void;
+  onRefineClick: () => void;
 }
 
-const SearchBar: React.FC<SearchBarProps> = ({query, setQuery}) => {
+const SearchBar: React.FC<SearchBarProps> = ({query, setQuery, onRefineClick}) => {
   const [localQuery, setLocalQuery] = useState(query);
 
  useEffect(() => {
@@ -41,6 +42,7 @@ const SearchBar: React.FC<SearchBarProps> = ({query, setQuery}) => {
             )}
             <button aria-label="Refine Results"
               className="px-3 flex items-center justify-center bg-gray-200 hover:bg-gray-400 text-gray-900 cursor-pointer hover:text-blue-700"
+              onClick={()=>onRefineClick()}
             >
               <SlidersHorizontal className="w-5 h-5" />
             </button>
