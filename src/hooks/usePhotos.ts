@@ -1,12 +1,19 @@
 //custom hook to fetch photos from unsplash
-import { useState, useEffect, useCallback } from "react"
+import { useState, useEffect, useCallback, useRef } from "react"
 import type { UnsplashPhoto } from "../types/unsplash"
 import { getNewPhotos, searchPhotos } from "../api/api"
 import { PHOTOS_PER_PAGE } from "../config/constants";
 
 const perPage = PHOTOS_PER_PAGE;
 
+function dedupe(arr: UnsplashPhoto[]) {
+  return Array.from(
+    new Map(arr.map(p => [p.id, p])).values()
+  );
+}
+
 export const usePhotos = () => {
+  const requestIdRef = useRef(0);
   const [photos, setPhotos] = useState<UnsplashPhoto[]>([])
   const [searchQuery, setSearchQuery] = useState<string>("")
   const [loading, setLoading] = useState<boolean>(false)
@@ -14,43 +21,40 @@ export const usePhotos = () => {
   const [hasMore, setHasMore] = useState<boolean>(true)
  
   const fetchPhotos = useCallback(async (pageNumber = 1, searchTerm="", isLoadMore=false) => {
-    setLoading(true)
-    try{
-      if(searchTerm){
-        const response = await searchPhotos(searchTerm, pageNumber, perPage) 
-        const searchData = response.data;
-        
-        setHasMore(pageNumber < searchData.total_pages)
+    const requestId = ++requestIdRef.current;
 
-        if(isLoadMore){
-          setPhotos(prev => {
-            const combined = [...prev, ...searchData.results];
-            const unique = Array.from(new Map(combined.map(p => [p.id, p])).values());
-            return unique;
-          });
-        } else {
-          setPhotos(searchData.results);
-        }
+    if (!isLoadMore) setLoading(true);
+    
+    try{
+      if(searchTerm.trim()){
+        const response = await searchPhotos(searchTerm, pageNumber, perPage);
+        if (requestId !== requestIdRef.current) return;
+        const searchData = response.data;        
+        setHasMore(pageNumber < searchData.total_pages)
+        const newPhotos = searchData.results;
+
+        setPhotos(prev => 
+          isLoadMore ? dedupe([...prev, ...newPhotos]) : newPhotos
+        );
+        
       } else {
         const response = await getNewPhotos(pageNumber, perPage);
-        const photos = response.data;
-       setHasMore(photos.length === perPage)
 
-        if(isLoadMore){
-          setPhotos(prev => {
-            const combined = [...prev, ...photos];
-            const unique = Array.from(new Map(combined.map(p => [p.id, p])).values());
-            return unique;
-          });
-        } else {
-          setPhotos(photos);
-        }
+        if (requestId !== requestIdRef.current) return;
 
+        const newPhotos = response.data;
+        setHasMore(newPhotos.length === perPage)
+
+        setPhotos(prev =>
+            isLoadMore
+              ? dedupe([...prev, ...newPhotos])
+              : newPhotos
+          );
       }      
     } catch (err){
       if(!isLoadMore) setPhotos([]);
       setHasMore(false)
-      console.log("error : ", err)
+      console.log("error :", err) 
     } finally {
       setLoading(false);
     }    
@@ -68,7 +72,6 @@ export const usePhotos = () => {
     // Reset pagination on new search
     setPage(1);
     setHasMore(true);
-    // setPhotos([]);
 
     if (searchQuery.trim()) {
       fetchPhotos(1, searchQuery);

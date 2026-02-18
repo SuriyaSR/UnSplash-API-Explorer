@@ -17,9 +17,9 @@ export interface UnsplashPhoto {
         };
     };
     links: {
-        html: string;              // photographer credit link
-        download: string;          // direct download
-        download_location: string; // API download tracking link
+        html: string;              
+        download: string;          
+        download_location: string;
     };
 }
 
@@ -28,8 +28,45 @@ export interface UnsplashSearchResponse {
     total_pages: number;
     results: UnsplashPhoto[];
 }
-export interface unsplashCategoies {
+export interface UnsplashTopic {
     id: string;
     slug: string;
     title: string;
 }
+
+export type SearchOrderBy = | "relevant" | "latest";
+
+export type TopicOrderBy = | "latest" | "oldest" | "popular";
+
+export type Topic = {
+  id: string;
+  slug: string;
+  title: string;
+};
+
+export const COLOR_OPTIONS = [
+  "black_and_white",
+  "black",
+  "white",
+  "yellow",
+  "orange",
+  "red",
+  "purple",
+  "magenta",
+  "green",
+  "teal",
+  "blue"
+] as const;
+
+export type Color = typeof COLOR_OPTIONS[number];
+
+export type Filters = {
+  topicFilter?: UnsplashTopic; // topic slugs
+  orientation?: "landscape" | "portrait" | "squarish";
+  color?: Color;
+    //default for photos without topics filter - relevant
+  searchOrderBy? : SearchOrderBy;
+    //default for photos with topics filter- latest
+  topicOrderBy?: TopicOrderBy; 
+  infiniteScroll: boolean;
+};  

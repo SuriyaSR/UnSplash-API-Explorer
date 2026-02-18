@@ -6,6 +6,7 @@ import ErrorBanner from "./components/common/ErrorBanner";
 import { useCallback, useRef, useState } from "react";
 import ScrollToTopButton from "./components/common/ScrollToTopButton";
 import { PhotoGrid } from "@/components/photos";
+import RefineDrawer from "./components/overlays/RefineDrawer";
 
 function App() {
 
@@ -13,6 +14,7 @@ function App() {
   const { photos, loading, searchQuery, setSearchQuery, fetchPhotos, loadMorePhotos, hasMore } = usePhotos();
   const galleryRef = useRef<{ scrollToTop: () => void }>(null);
   const [showScrollButton, setShowScrollButton] = useState(false);
+  const [isRefineOpen, setIsRefineOpen] = useState(false);
 
   const reloadPics = () => {
     clearError();
@@ -23,13 +25,25 @@ function App() {
     setShowScrollButton(!atTop);
   }, []);
 
+  const onFiltersApply = () => {
+    alert("Filters applied")
+  }
+
   return (
     <ErrorBoundary>
       <div className="h-screen flex flex-col bg-gray-50 text-center p-6">
         <h1 className="text-3xl font-semibold mb-4"> UnSplash Image Explorer </h1>
-        <SearchBar query={searchQuery} setQuery={setSearchQuery} />
-
+        <SearchBar query={searchQuery} setQuery={setSearchQuery} onRefineClick={() => setIsRefineOpen(true)}/>
+        <RefineDrawer
+          open={isRefineOpen}
+          onClose={() => setIsRefineOpen(false)} onApply={onFiltersApply}
+        />
         <div className="mt-6 flex-1 overflow-hidden">
+          {!loading && photos.length === 0 && (
+            <p className="text-gray-500 text-lg">
+              No photos found. Try another search.
+            </p>
+          )}
           {loading && photos.length === 0 ? (
             <p className="text-gray-500 text-lg">Loading photos...</p>
           ) : error.message ? (
