@@ -8,12 +8,7 @@ interface Props {
   onChange: (topic?: UnsplashTopic) => void;
 }
 
-export const TopicsFilter = ({
-  topics,
-  loading,
-  value,
-  onChange
-}: Props) => (
+export const TopicsFilter = ({ topics, loading, value, onChange }: Props) => (
   <FilterSection label="Topics">
     <select
       value={value?.slug ?? ""}
